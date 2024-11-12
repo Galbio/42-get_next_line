@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gakarbou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:31:23 by gakarbou          #+#    #+#             */
-/*   Updated: 2024/11/12 23:45:07 by gakarbou         ###   ########.fr       */
+/*   Updated: 2024/11/12 23:34:20 by gakarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_fill_stash(char *stash, int fd)
 {
@@ -20,7 +20,7 @@ char	*ft_fill_stash(char *stash, int fd)
 
 	dest = ft_strjoin(stash, NULL);
 	if (!dest)
-		return (NULL);
+		return (ft_free_stuff(stash, dest, NULL));
 	readed = 1;
 	temp = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!temp)
@@ -81,39 +81,60 @@ char	*move_stash(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
+	static char	*stash[4096];
 	char		*line;
 
 	if (fd < 0)
 		return (NULL);
-	stash = ft_fill_stash(stash, fd);
-	if (!stash)
+	stash[fd] = ft_fill_stash(stash[fd], fd);
+	if (!stash[fd])
 		return (NULL);
-	else if (!stash[0])
+	else if (!stash[fd][0])
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	line = ft_get_line(stash);
-	stash = move_stash(stash);
+	line = ft_get_line(stash[fd]);
+	stash[fd] = move_stash(stash[fd]);
 	return (line);
 }
 
 /*
 #include <stdio.h>
 #include <fcntl.h>
+
+void	test_gnl(int fd, char *supposed)
+{
+	printf("%s%s\n\n\n", get_next_line(fd), supposed);
+}
+
 int	main(void)
 {
-	int fd = open("f.txt", O_RDONLY);
-	int	i = -1;
-	char	*line;
-	while (++i < 10)
-	{
-		line = get_next_line(fd);
-		if (line)
-			printf("%s", line);
-		free(line);
+	int fd = open("read_error.txt", O_RDONLY);
+	int fd2 = open("lines_around_10.txt", O_RDONLY);
+	test_gnl(fd, "aaaaaaaaaa\n");
+	test_gnl(fd2, "0123456789\n");
+	test_gnl(fd, "bbbbbbbbbb\n");
+	test_gnl(fd2, "012345678\n");
+	if (BUFFER_SIZE > 100) {
+		char *temp;
+		do
+		{
+			temp = get_next_line(fd);
+			free(temp);
+		} while (temp);
 	}
+	close(fd);
+	test_gnl(fd2, "90123456789\n");
+	fd = open("read_error.txt", O_RDONLY);
+	test_gnl(fd, "aaaaaaaaaa\n");
+	test_gnl(fd2, "0123456789\n");
+	test_gnl(fd, "bbbbbbbbbb\n");
+	test_gnl(fd, "cccccccccc\n");
+	test_gnl(fd2, "xxxx\n");
+	test_gnl(fd2, NULL);
+	test_gnl(fd, "dddddddddd\n");
+	test_gnl(fd, NULL);
 }
 */
