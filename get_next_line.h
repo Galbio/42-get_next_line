@@ -6,7 +6,7 @@
 /*   By: gakarbou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:45:25 by gakarbou          #+#    #+#             */
-/*   Updated: 2024/11/12 21:32:31 by gakarbou         ###   ########.fr       */
+/*   Updated: 2024/11/13 01:45:37 by gakarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # endif
 
 int		stash_len(char *str);
-char	*ft_strjoin(char *s1, char *s2);
 int		ft_strchr(char *s, int c);
+char	*ft_strjoin(char *s1, char *s2, int fre);
 void	*ft_free_stuff(void *p1, void *p2, void *p3);
 
 char	*get_next_line(int fd);

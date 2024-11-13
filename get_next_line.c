@@ -6,7 +6,7 @@
 /*   By: gakarbou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:31:23 by gakarbou          #+#    #+#             */
-/*   Updated: 2024/11/13 00:22:41 by gakarbou         ###   ########.fr       */
+/*   Updated: 2024/11/13 01:44:56 by gakarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ char	*ft_fill_stash(char *stash, int fd)
 	char	*temp;
 	int		readed;
 
-	dest = ft_strjoin(stash, NULL);
-	if (!dest)
-		return (NULL);
+	dest = ft_strjoin(stash, NULL, 0);
+	if (stash)
+		free(stash);
 	readed = 1;
 	temp = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!temp)
@@ -29,11 +29,13 @@ char	*ft_fill_stash(char *stash, int fd)
 	{
 		readed = read(fd, temp, BUFFER_SIZE);
 		if (readed < 0)
-			return (ft_free_stuff(dest, temp, NULL));
-		temp[readed] = 0;
-		dest = ft_strjoin(dest, temp);
-		if (!dest)
+		{
+			free(temp);
+			free(dest);
 			return (NULL);
+		}
+		temp[readed] = 0;
+		dest = ft_strjoin(dest, temp, 1);
 	}
 	free(temp);
 	return (dest);

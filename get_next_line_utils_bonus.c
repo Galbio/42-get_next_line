@@ -6,7 +6,7 @@
 /*   By: gakarbou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 21:30:41 by gakarbou          #+#    #+#             */
-/*   Updated: 2024/11/12 22:06:49 by gakarbou         ###   ########.fr       */
+/*   Updated: 2024/11/13 01:51:06 by gakarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	stash_len(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int fre)
 {
 	size_t	i;
 	size_t	j;
@@ -39,7 +39,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		dest[i] = s1[i];
 		i++;
 	}
-	if (s1)
+	if (fre && s1)
 		free(s1);
 	j = 0;
 	while (s2 && s2[j])
